@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <EditText
+        android:id="@+id/search_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:drawableLeft="@drawable/ic_search"
+        android:hint="@string/search_hint"
+        android:singleLine="true" 
+        android:layout_alignParentTop="true"/>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" 
+        android:layout_below="@id/search_view"
+        android:layout_marginBottom="@dimen/d50">
+
+        <include
+            layout="@layout/loading_empty_view"
+             />
+        
+         <com.sctek.passwordnote.sortlistview.PinnedHeaderListView
+            android:id="@+id/list_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scrollingCache="false" />
+    </FrameLayout>
+    
+    <Button 
+	        android:id="@+id/add_bt"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:gravity="center"
+	        android:background="@drawable/image_button_selector"
+	        android:text="@string/add"
+	        android:textColor="@color/white"
+	        android:textStyle="bold"
+	        android:textSize="@dimen/d20"
+	        android:onClick="onAddButtonClicked"/>
+
+</RelativeLayout>

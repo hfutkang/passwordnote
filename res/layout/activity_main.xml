@@ -1,0 +1,91 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sctek.passwordnote.ui.MainActivity1" >
+    
+    <TextView 
+        android:id="@+id/state_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="10dp"/>
+    
+    <EditText 
+        android:id="@+id/url_et"
+        android:layout_below="@id/state_tv"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingLeft="2dp"
+        android:minLines="1"
+        android:gravity="top"
+        android:background="@drawable/bordershape"
+        android:hint="@string/input_data_here"/>
+        
+    
+    <!-- <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp">
+        
+        <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="用户名:" />
+        <EditText 
+            android:id="@+id/user_name_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="输入登录用户名"/>
+        
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp">
+        
+        <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="密码:" />
+        <EditText 
+            android:id="@+id/password_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="输入登录密码"/>
+    </LinearLayout> -->
+    
+    <LinearLayout 
+        android:id="@+id/bottom_lout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:background="@color/deepskyblue" >
+        
+        <Button 
+	        android:id="@+id/save_bt"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="@dimen/d5"
+	        android:paddingRight="@dimen/d5"
+	        android:background="@drawable/image_button_selector"
+	        android:text="@string/send"
+	        android:textColor="@color/white"
+	        android:textStyle="bold"
+	        android:textSize="@dimen/d20"
+	        android:onClick="onSendButtonClicked"/>
+        
+    </LinearLayout>
+    
+    
+</RelativeLayout>

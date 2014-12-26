@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+	<item type="id" name="bt_disabled"/>
+	<item type="id" name="find_service"/>
+	<item type="id" name="data_readable"/>
+	<item type="id" name="data_received"/>
+	<item type="id" name="data_send_complete"/>
+	<item type="id" name="data_send_fail"/>
+	<item type="id" name="reconnect_timeout"/>
+	<item type="id" name="resend_countout"/>
+	<item type="id" name="scan_time_out"/>
+	<item type="id" name="scanning"/>
+	<item type="id" name="device_find"/>
+	<item type="id" name="start_sending"/>
+    
+</resources>

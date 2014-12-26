@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sctek.passwordnote.ui.NewWebActivity" >
+
+    <LinearLayout 
+        android:id="@+id/name_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d50"
+        android:orientation="horizontal">
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d10"
+            android:text="@string/web_name"/>
+        <EditText 
+            android:id="@+id/name_et"
+            android:layout_width="@dimen/d200"
+            android:layout_height="@dimen/d35"
+            android:layout_marginLeft="@dimen/d5"
+            android:singleLine="true"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/url_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d10"
+        android:layout_below="@id/name_ll"
+        android:orientation="horizontal">
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d10"
+            android:text="@string/web_url"/>
+        <EditText 
+            android:id="@+id/url_et"
+            android:layout_width="@dimen/d200"
+            android:layout_height="@dimen/d35"
+            android:layout_marginLeft="@dimen/d5"
+            android:singleLine="true"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/tabs_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d10"
+        android:layout_below="@id/url_ll"
+        android:orientation="horizontal">
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d10"
+            android:text="@string/tabs"/>
+        <EditText 
+            android:id="@+id/tabs_et"
+            android:layout_width="@dimen/d200"
+            android:layout_height="@dimen/d35"
+            android:layout_marginLeft="@dimen/d5"
+            android:singleLine="true"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+    
+    <Button 
+	        android:id="@+id/save_bt"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:gravity="center"
+	        android:background="@drawable/image_button_selector"
+	        android:text="@string/save"
+	        android:textColor="@color/white"
+	        android:textStyle="bold"
+	        android:textSize="@dimen/d20"
+	        android:onClick="onSaveButtonClicked"/>
+
+</RelativeLayout>
