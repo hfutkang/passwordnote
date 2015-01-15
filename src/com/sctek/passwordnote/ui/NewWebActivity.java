@@ -65,7 +65,7 @@ public class NewWebActivity extends Activity {
 		else {
 			ArrayList<WebData> webList = mWeb.getWebs();
 			for(int i = 0; i < webList.size(); i++) {
-				if(url.equals(webList.get(i).url)) {
+				if(url.compareToIgnoreCase(webList.get(i).url) != 0) {
 					Toast.makeText(this, R.string.url_exist,
 							Toast.LENGTH_SHORT).show();
 					return;

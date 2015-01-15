@@ -13,5 +13,6 @@
 	<item type="id" name="scanning"/>
 	<item type="id" name="device_find"/>
 	<item type="id" name="start_sending"/>
+	<item type="id" name="waiting_to_senddata_timeout"/>
     
 </resources>

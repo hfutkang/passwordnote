@@ -82,55 +82,58 @@ public class LoginActivity extends Activity {
 		
 		serviceManager = new ServiceManager(this);
 		serviceManager.bindLocateService();
+		
+		btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+		btAdapter = btManager.getAdapter();
+		sending = false;
+		
 		initView();
 	}
 	
 	@Override
 	protected void onResume() {
+		Log.e(TAG, "onResume");
 		// TODO Auto-generated method stub
-		btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-		btAdapter = btManager.getAdapter();
-		sending = false;
-		new Handler().postDelayed(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				serviceManager.attachHandler(handler);
-			}
-		}, 0);
-			
 		super.onResume();
-		
 	}
 	
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		Log.e(TAG, "onPause");
-		sendingDataDialog = null;
-		serviceManager.detachHandler();
-		handler.removeCallbacks(null);
 		super.onPause();
 	}
 	
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
+		Log.e(TAG, "onDestroy");
 		serviceManager.unBindLocateService();
+		sendingDataDialog = null;
+		serviceManager.detachHandler();
+		handler.removeCallbacksAndMessages(null);
 		super.onDestroy();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		Log.e(TAG, "onBackPressed");
+		super.onBackPressed();
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		if(requestCode ==1 && resultCode == RESULT_OK) {
+			sending = true;
 			Intent intent = new Intent(this, BleService.class);
 			intent.putExtra("url", url);
 			intent.putExtra("username", userName);
 			intent.putExtra("password", password);
 			intent.putExtra("tabs", tabs);
 			startService(intent);
+			showSendingDataView();
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -215,6 +218,16 @@ public class LoginActivity extends Activity {
 			
 			userNameEt.addTextChangedListener(textChangeWatcher);
 			passwordEt.addTextChangedListener(textChangeWatcher);
+			
+			new Handler().postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					serviceManager.attachHandler(handler);
+				}
+			}, 0);
+			
 			return;
 		}
 		
@@ -229,6 +242,14 @@ public class LoginActivity extends Activity {
 		userNameEt.addTextChangedListener(textChangeWatcher);
 		passwordEt.addTextChangedListener(textChangeWatcher);
 		
+		new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				serviceManager.attachHandler(handler);
+			}
+		}, 0);
 	}
 	
 	private TextWatcher textChangeWatcher = new TextWatcher() {
@@ -278,15 +299,15 @@ public class LoginActivity extends Activity {
 			Field afield = sendingDataDialog.getClass().getSuperclass().getDeclaredField("mShowing");
 			afield.setAccessible(true);  
 			afield.set(sendingDataDialog, true);
-			
-			sendingDataDialog.cancel();
-			if(ok) {
-				finish();
-			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
+		
+		sendingDataDialog.cancel();
+		if(ok) {
+			finish();
+		}
 	}
 	
 	Handler handler = new Handler() {
@@ -351,6 +372,18 @@ public class LoginActivity extends Activity {
 				break;
 			case R.id.scanning:
 				stateTv.setText(R.string.scanning_device);
+				break;
+			case R.id.waiting_to_senddata_timeout:
+				sending = false;
+				stateTv.setText(R.string.device_no_response);
+				handler.postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						cancelWaitView(false);
+					}
+				}, 1000);
 				break;
 			default:
 					break;

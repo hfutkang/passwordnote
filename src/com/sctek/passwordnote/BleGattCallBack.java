@@ -35,6 +35,7 @@ public class BleGattCallBack extends BluetoothGattCallback{
 	private UUID rxCharaUuid;
 	
 	public BleGattCallBack(String u, String n, String p , Handler h) {
+		
 		url = u;
 		userName = n;
 		password = p;
@@ -86,6 +87,7 @@ public class BleGattCallBack extends BluetoothGattCallback{
 						BluetoothGattCharacteristic bleGattCharacteristic 
 														= characterList.get(j);
 						if(bleGattCharacteristic.getUuid().equals(txCharaUuid)) {
+							if(handler != null)
 								handler.sendEmptyMessage(R.id.find_service);
 						}
 						if(bleGattCharacteristic.getUuid().equals(rxCharaUuid)) {
@@ -126,8 +128,10 @@ public class BleGattCallBack extends BluetoothGattCallback{
 		byte[] v = characteristic.getValue();
 		int d = unsignedBytesToInt(v[0], v[1]);
 		Log.e(TAG, "" + d + " " + v.length);
-		Message msg = handler.obtainMessage(R.id.data_received, d, 0);
-		msg.sendToTarget();
+		if(handler != null) {
+			Message msg = handler.obtainMessage(R.id.data_received, d, 0);
+			msg.sendToTarget();
+		}
 		super.onCharacteristicChanged(gatt, characteristic);
 	}
 
@@ -164,5 +168,9 @@ public class BleGattCallBack extends BluetoothGattCallback{
 	public int unsignedByteToInt(byte b) {
         return b & 0xFF;
     }
+	
+	public void dettachHandler() {
+		handler = null;
+	}
 
 }

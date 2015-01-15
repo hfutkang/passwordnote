@@ -29,6 +29,8 @@ public class BleService extends Service implements
 	
 	private final static String Q_DEVICE_NAME = "Quintic BLE";
 	
+	private String newLineChar = System.getProperty("line.separator", "\n");
+	
 	private final static String SERVICE_UUID = "0000fee9-0000-1000-8000-00805f9b34fb";
 	private final static String TX_CHARA_UUID = "D44BC439-ABFD-45A2-B575-925416129600";
 	private final static String RX_CHARA_UUID = "D44BC439-ABFD-45A2-B575-925416129601";
@@ -95,7 +97,7 @@ public class BleService extends Service implements
 		mGattCallBack = new BleGattCallBack(url, userName, password, bleHandler);
 		
 		scanLeDevice();
-		return super.onStartCommand(intent, flags, startId);
+		return START_NOT_STICKY;
 	}
 
 	@Override
@@ -130,11 +132,14 @@ public class BleService extends Service implements
 		}
 		
 		if(!findOne&&deviceName !=null&&deviceName.equals(Q_DEVICE_NAME)) {
+			
+			btAdapter.stopLeScan(this);
 			findOne = true;
+			scanning = false;
+				
 			handler.sendEmptyMessage(R.id.device_find);
 			mBleDevice = device;
-			btAdapter.stopLeScan(this);
-			scanning = false;
+			
 			mBluetoothGatt = device.connectGatt(getApplicationContext(), false, mGattCallBack);
 			
 			bleAddress = device.getAddress();
@@ -178,12 +183,22 @@ public class BleService extends Service implements
 				handler.sendEmptyMessage(R.id.find_service);
 				mGattService = mBluetoothGatt.getService(serviceUuid);
 				mGattCharacteristic = mGattService.getCharacteristic(txCharaUuid);
+				bleHandler.postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						handler.sendEmptyMessage(R.id.waiting_to_senddata_timeout);
+						mBluetoothGatt.disconnect();
+						mGattCallBack.dettachHandler();
+					}
+				}, 10*1000);
 				//startSendData();
 				break;
 			case R.id.data_received:
 				
 				retryCount = 0;
-				bleHandler.removeCallbacks(mRunnable);
+				bleHandler.removeCallbacksAndMessages(null);
 				
 				int offset = msg.arg1;
 				if(offset == 0)
@@ -216,7 +231,7 @@ public class BleService extends Service implements
 						== BluetoothProfile.STATE_CONNECTED) {
 					Log.e(TAG, "resend");
 					sendData(segBuff);
-					bleHandler.postDelayed(mRunnable, 500);
+					bleHandler.postDelayed(mRunnable, 2000);
 				}
 				else if(!reConnect(bleAddress)) {
 					Log.e(TAG, "reconnect fail");
@@ -239,14 +254,15 @@ public class BleService extends Service implements
 		tabs = bundle.getInt("tabs");
 		Log.e(TAG, url + " " + userName + " " + password + " " + tabs);
 		StringBuffer buffer = new StringBuffer();
-//		buffer.append(url + '\n');
-//		for(int i = 0; i < tabs; i++)
-//			buffer.append('\t');
-//		buffer.append(userName + '\t');
-//		buffer.append(password);
+		buffer.append(url + newLineChar);
+		for(int i = 0; i < tabs; i++)
+			buffer.append('\t');
+		buffer.append(userName + '\t');
+		buffer.append(password);
 		
-//		dataBuff = buffer.toString().getBytes();
-		dataBuff = url.getBytes();
+		dataBuff = buffer.toString().getBytes();
+//		url = url + '\n';
+//		dataBuff = url.getBytes();
 		totalLength = (short) dataBuff.length;
 		CountIndex = 0;
 		
@@ -299,32 +315,32 @@ public class BleService extends Service implements
 		
 		ByteArrayBuffer buff = new ByteArrayBuffer(20);
 		
-//		byte checkByte;
+		byte checkByte;
 		
 		byte[] len = new byte[2];
 		len[1] = (byte) (totalLength >> 8);
 		len[0] = (byte) (totalLength >> 0);
 		buff.append(len, 0, 2);
 		
-//		checkByte = (byte) (len[0]^len[1]);
+		checkByte = (byte) (len[0]^len[1]);
 		
 		len[1] = (byte) (CountIndex >> 8);
 		len[0] = (byte) (CountIndex >> 0);
 		
-//		checkByte = (byte) (len[0]^checkByte);
-//		checkByte = (byte) (len[1]^checkByte);
+		checkByte = (byte) (len[0]^checkByte);
+		checkByte = (byte) (len[1]^checkByte);
 		
 		buff.append(len, 0, 2);
 		
 		int bytesLeft = totalLength - CountIndex;
-//		for(int i = 0; i<15&&i<bytesLeft; i++) {
-//			checkByte ^= dataBuff[CountIndex + i];
-//		}
+		for(int i = 0; i<15&&i<bytesLeft; i++) {
+			checkByte ^= dataBuff[CountIndex + i];
+		}
 		buff.append(dataBuff, CountIndex, 
-				bytesLeft >= 16?16:bytesLeft);
-		CountIndex = (short)(bytesLeft >= 16?
-				(CountIndex + 16):(CountIndex + bytesLeft));
-//		buff.append(new byte[]{checkByte}, 0, 1);
+				bytesLeft >= 15?15:bytesLeft);
+		CountIndex = (short)(bytesLeft >= 15?
+				(CountIndex + 15):(CountIndex + bytesLeft));
+		buff.append(new byte[]{checkByte}, 0, 1);
 		Log.e(TAG, "" + buff.toByteArray().length);
 		return buff.toByteArray();
 	}

@@ -15,6 +15,7 @@
     <string name="service_find">发现服务,准备发送数据&#8230;</string>
     <string name="sending">连接成功,发送数据中&#8230;</string>
     <string name="sending_data">数据发送中</string>
+    <string name="device_no_response">设备无响应</string>
     <string name="digits">1234567890qwertyuiopasdfghjklzxcvbnm
         ABCDEFGHIJKMNLOPQRSTOVWXYZ&quot;&apos;&amp;&lt;&gt;&#x0009;
         &#x000D;&#x000A;</string>
